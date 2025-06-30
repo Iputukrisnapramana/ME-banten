@@ -6,7 +6,7 @@ Aplikasi web untuk **deteksi otomatis jenis banten Bali** menggunakan kamera dan
 
 ## Fitur
 
-- Deteksi lima jenis banten Bali: **Canang Sari, Pejati, Gebogan, Daksina, Lamak**.
+- Deteksi banten Bali**.
 - Menggunakan kamera perangkat (HP/laptop) secara langsung.
 - Menampilkan penjelasan, makna, cara pembuatan, dan link YouTube (jika ada) untuk setiap banten yang terdeteksi.
 - Tampilan modern, responsif, dan mudah digunakan.
