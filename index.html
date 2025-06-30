@@ -3,20 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deteksi Banten Bali</title>
+  <title>Me-banten</title>
   <link rel="icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo">
-    <h1>Me-banten</h1>
+  <img class="hiasan hiasan-kiri" src="hiasan.png" alt="hiasan kiri" style="position:fixed;top:-10%;left:-180px;transform:translateY(0);width:400px;max-width:32vw;opacity:1;z-index:1;pointer-events:none;">
+  <img class="hiasan hiasan-kanan" src="hiasan.png" alt="hiasan kanan" style="position:fixed;top:70%;right: -180px;transform:translateY(0);width:400px;max-width:32vw;opacity:1;z-index:1;pointer-events:none;">
+  <header class="ai-header">
+    <img src="logo.png" alt="Logo" class="ai-logo">
+    <span class="ai-title"> ME-banten <span class="ai-badge">AI Scan</span></span>
   </header>
-  <main>
-    <video id="video" autoplay playsinline></video>
-    <button id="detectBtn">Deteksi Banten</button>
-    <div id="result">Arahkan kamera ke banten, lalu klik tombol di atas untuk deteksi.</div>
+  <main class="ai-main">
+    <div class="ai-scan-container">
+      <div class="ai-video-wrapper">
+        <video id="video" autoplay playsinline></video>
+        <button id="detectBtn" class="ai-scan-btn">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="#ffffff" stroke-width="2" fill="#1e1e1e"/><line x1="17" y1="17" x2="22" y2="22" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/></svg>
+          Cari Tau
+        </button>
+      </div>
+      <div id="result" class="ai-result-card">Arahkan kamera ke banten yang ingin dicari tau</div>
+    </div>
   </main>
+  <footer class="ai-footer">
+    <span>Powered by <b>Krisna & Egi</b> &copy; 2025</span>
+  </footer>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
   <script src="teachablemachine-image.min.js"></script>
   <script>
@@ -26,36 +41,36 @@
         nama: "Canang Sari",
         kategori: "Harian",
         makna: "Canang Sari merupakan simbol rasa syukur sehari-hari kepada Tuhan atas kehidupan yang telah diberikan. Biasanya dipersembahkan di pagi atau sore hari.",
-        cara: "Dibuat dari janur yang dianyam menjadi wadah kecil, diisi dengan bunga warna-warni (cempaka, sandat, mawar), kepeng uang sebagai simbol rezeki, serta diberi dupa untuk doa.",
-        youtube: "YouTube"
+        cara: "Dibuat dari janur yang dianyam menjadi wadah kecil, diisi dengan bunga warna-warni (cempaka, Pacar, Pandan), kepeng uang sebagai simbol rezeki, serta diberi dupa untuk doa.",
+        youtube: "https://youtu.be/jvT6REmXRgY?si=8lDJEZJ3_3MG5JaA"
       },
       "pejati_pejati": {
         nama: "Pejati",
         kategori: "Upacara",
         makna: "Pejati adalah persembahan utama dalam upacara keagamaan Hindu Bali yang melambangkan ketulusan dan kesungguhan hati dalam memuja Ida Sang Hyang Widhi.",
         cara: "Disusun secara lengkap dari nasi putih, lauk-pauk (seperti ayam betutu), canang, buah-buahan, dan dupa. Semua elemen diletakkan dalam satu tampah bambu yang disucikan.",
-        youtube: "YouTube"
+        youtube: "https://youtu.be/P6rrSp_wwM4?si=0ThR6viCyOzgynVJ"
       },
       "gebogan_gebogan": {
         nama: "Gebogan",
         kategori: "Upacara Besar",
         makna: "Gebogan merupakan persembahan mewah dan penuh hormat kepada Tuhan, sering dipakai dalam upacara besar seperti odalan atau piodalan di pura.",
         cara: "Disusun secara vertikal dari berbagai jenis buah (pisang, jeruk, apel), bunga hias, dan canang, dengan teknik menyusun yang kokoh di atas tampah dan ditancapkan menggunakan batang bambu.",
-        youtube: "YouTube"
+        youtube: "https://youtube.com/shorts/nstlydso6mU?si=2yNRobcQtlF6Wxm8"
       },
       "daksina_daksina": {
         nama: "Daksina",
         kategori: "Pelengkap",
         makna: "Daksina melambangkan keseimbangan kosmos dan spiritualitas, sebagai bentuk penghormatan kepada dewa-dewi dan alam semesta dalam setiap upacara.",
         cara: "Menggunakan wadah seperti nampan atau bokor, diisi dengan kelapa (melambangkan alam), porosan (simbol Brahma, Wisnu, Siwa), canang sari, uang logam, dan bunga segar.",
-        youtube: "YouTube"
+        youtube: "https://youtu.be/Db0NAoUCb_Y?si=K71AxnvXgvTuDOU_"
       },
       "lamak_lamak": {
         nama: "Lamak",
         kategori: "Dekoratif",
         makna: "Lamak berfungsi sebagai penolak bala dan simbol pemagaran spiritual yang biasa digantung di depan rumah saat Hari Raya Galungan.",
         cara: "Dibuat dari janur yang dianyam memanjang menyerupai pita dengan motif khas, dihiasi potongan bunga atau simbol keagamaan, dan digantung di depan rumah sebagai pelindung.",
-        youtube: "YouTube"
+        youtube: "https://youtu.be/YB3n7hSsaes?si=N35ajvQlMAf1DzvH"
       }
     };
 
@@ -101,10 +116,13 @@
       // Tampilkan loading ala AI
       resultDiv.innerHTML = `
         <div class="ai-loading">
-          Mendeteksi banten <span class="ai-dots"><span class="ai-dot">.</span><span class="ai-dot">.</span><span class="ai-dot">.</span></span>
+          <span class="ai-loading-text">Mendeteksi banten</span>
+          <span class="ai-dots"><span class="ai-dot">.</span><span class="ai-dot">.</span><span class="ai-dot">.</span></span>
         </div>
       `;
-      // Ambil prediksi dari frame video
+
+      await new Promise(resolve => setTimeout(resolve, 1200));
+
       const prediction = await model.predict(video);
       // Cari prediksi dengan probabilitas tertinggi
       let best = prediction[0];
@@ -116,24 +134,43 @@
         const key = normalizeLabel(best.className);
         const data = bantenData[key];
         if (data) {
-          resultDiv.innerHTML = `
-            <div class="banten-card">
-              <div class="banten-title">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="12" fill="gold"/><text x="12" y="17" text-anchor="middle" font-size="15" font-family="Arial" fill="#1e1e1e" font-weight="bold">🪔</text></svg>
-                ${data.nama}
-              </div>
-              <div class="banten-kategori">${data.kategori}</div>
-              <div class="banten-section"><span class="banten-label">Makna & Fungsi:</span><span class="desc">${data.makna}</span></div>
-              <div class="banten-section"><span class="banten-label">Cara Membuat:</span><span class="desc">${data.cara}</span></div>
-              <div class="banten-section">
-                <span class="banten-label">Link YouTube:</span>
-                <a class="youtube-link" href="${data.youtube}" target="_blank">
-                  <svg class="youtube-icon" viewBox="0 0 24 24"><path fill="#fff" d="M23.498 6.186a2.994 2.994 0 0 0-2.108-2.116C19.228 3.5 12 3.5 12 3.5s-7.228 0-9.39.57A2.994 2.994 0 0 0 .502 6.186C0 8.353 0 12 0 12s0 3.647.502 5.814a2.994 2.994 0 0 0 2.108 2.116C4.772 20.5 12 20.5 12 20.5s7.228 0 9.39-.57a2.994 2.994 0 0 0 2.108-2.116C24 15.647 24 12 24 12s0-3.647-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                  Tonton di YouTube
-                </a>
-              </div>
-            </div>
-          `;
+          resultDiv.innerHTML = '<div class="banten-card" id="bantenCard"></div>';
+          const card = document.getElementById('bantenCard');
+          // Bagian-bagian hasil
+          const parts = [
+            `<div class=\"banten-title\">${data.nama}</div>`,
+            `<div class=\"banten-kategori\">${data.kategori}</div>`,
+            `<div class=\"banten-section\">Makna & Fungsi<br>${data.makna}</div>`,
+            `<div class=\"banten-section\">Cara Membuat<br>${data.cara}</div>`,
+            `<div class=\"banten-section\">Link YouTube:<br><a class=\"youtube-link\" href=\"${data.youtube}\" target=\"_blank\">Tonton di YouTube</a></div>`
+          ];
+          // Typewriter effect untuk setiap bagian
+          function typeWriter(target, html, cb) {
+            let i = 0;
+            function typing() {
+              target.innerHTML = html.slice(0, i) + '<span class="ai-cursor">|</span>';
+              i++;
+              if (i <= html.length) {
+                setTimeout(typing, 18);
+              } else {
+                target.innerHTML = html; // hapus cursor
+                if (cb) cb();
+              }
+            }
+            typing();
+          }
+
+          // Tampilkan satu per satu dengan typewriter
+          let i = 0;
+          function showPartTypewriter() {
+            const wrapper = document.createElement('div');
+            card.appendChild(wrapper);
+            typeWriter(wrapper, parts[i], function() {
+              i++;
+              if (i < parts.length) setTimeout(showPartTypewriter, 350);
+            });
+          }
+          showPartTypewriter();
         } else {
           resultDiv.innerHTML = `<span class="label">${best.className}</span><br>Data detail tidak ditemukan.`;
         }
