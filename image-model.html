@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Model - Me-banten</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .bar-label {
+      min-width: 90px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #222;
+    }
+    .bar-bg {
+      flex: 1;
+      background: #e0e0e0;
+      border-radius: 8px;
+      height: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 8px;
+      transition: width 1.8s linear;
+      position: absolute;
+      left: 0; top: 0;
+    }
+    .bar-percent {
+      min-width: 54px;
+      text-align: right;
+      font-size: 0.98rem;
+      font-weight: 500;
+      color: #1976d2;
+    }
+    .ai-header {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
+      justify-content: space-between;
+    }
+    .ai-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .ai-nav {
+      display: flex;
+      gap: 0.7rem;
+    }
+    .ai-nav-link {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.4rem 1.1rem;
+      border-radius: 100px;
+      transition: background 0.18s, color 0.18s;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+    }
+    .ai-nav-link.active, .ai-nav-link:hover {
+      background: #fff;
+      color: #1976d2;
+    }
+    @media (max-width: 600px) {
+      .ai-header {
+        padding: 0.7rem 0.5rem;
+        font-size: 0.98rem;
+        gap: 0.5rem;
+      }
+      .ai-header-left {
+        gap: 0.5rem;
+      }
+      .ai-nav-link {
+        font-size: 0.95rem;
+        padding: 0.3rem 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="ai-header">
+    <div class="ai-header-left">
+      <img src="logo.png" alt="Logo" class="ai-logo">
+      <span class="ai-title">ME-banten <span class="ai-badge">Image Model (Realtime)</span></span>
+    </div>
+    <nav class="ai-nav">
+      <a href="index.html" class="ai-nav-link">AI Scan</a>
+      <a href="image-model.html" class="ai-nav-link active">Banten Classifier</a>
+    </nav>
+  </header>
+  <main class="ai-main">
+    <h2>Scan Realtime: Banten Classifier</h2>
+    <div class="ai-scan-container">
+      <div class="ai-video-wrapper">
+        <video id="video" autoplay playsinline></video>
+      </div>
+      <div id="predictionResult" class="ai-result-card" style="margin-top:1.2rem;"></div>
+    </div>
+  </main>
+  <footer class="ai-footer">
+    <span>Powered by <b>Krisna & Egi</b> &copy; 2025</span>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
+  <script src="teachablemachine-image.min.js"></script>
+  <script>
+    const video = document.getElementById('video');
+    const resultDiv = document.getElementById('predictionResult');
+    let model;
+    let running = true;
+
+    // Warna pastel solid per kelas
+    const barColors = [
+      '#FFD180', // orange pastel
+      '#CE93D8', // ungu pastel
+      '#A5D6A7', // hijau pastel
+      '#81D4FA', // biru pastel
+      '#FFAB91', // merah pastel
+      '#FFF59D', // kuning pastel
+      '#80CBC4', // teal pastel
+      '#B39DDB', // biru tua pastel
+    ];
+
+    // Setup kamera
+    async function setupCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+        video.srcObject = stream;
+        return new Promise(resolve => {
+          video.onloadedmetadata = () => {
+            video.play();
+            resolve();
+          };
+        });
+      } catch (err) {
+        resultDiv.innerHTML = 'Tidak dapat mengakses kamera: ' + err.message;
+        running = false;
+      }
+    }
+
+    // Load model teachable machine
+    async function loadModel() {
+      model = await tmImage.load('model/model.json', 'model/metadata.json');
+    }
+
+    // Render bar animasi
+    function renderBars(prediction) {
+      let html = '<b>Prediksi Kelas:</b><br>';
+      prediction.forEach((p, idx) => {
+        const percent = (p.probability * 100).toFixed(2);
+        const barColor = barColors[idx % barColors.length];
+        html += `
+          <div class=\"bar-row\">
+            <span class=\"bar-label\">${p.className}</span>
+            <div class=\"bar-bg\">
+              <div class=\"bar-fill\" id=\"bar-fill-${idx}\" style=\"background:${barColor}\"></div>
+            </div>
+            <span class=\"bar-percent\">${percent}%</span>
+          </div>
+        `;
+      });
+      resultDiv.innerHTML = html;
+      // Animate bar width
+      prediction.forEach((p, idx) => {
+        const bar = document.getElementById(`bar-fill-${idx}`);
+        if (bar) {
+          bar.style.width = (p.probability * 100) + '%';
+        }
+      });
+    }
+
+    // Prediksi realtime
+    async function predictLoop() {
+      if (!model || !video.srcObject) return;
+      if (!running) return;
+      const prediction = await model.predict(video);
+      renderBars(prediction);
+      setTimeout(predictLoop, 100); // interval 0.1 detik
+    }
+
+    // Inisialisasi
+    window.addEventListener('DOMContentLoaded', async () => {
+      await setupCamera();
+      await loadModel();
+      predictLoop();
+    });
+  </script>
+</body>
+</html> 
