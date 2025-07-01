@@ -31,6 +31,7 @@
     .ai-nav {
       display: flex;
       gap: 0.7rem;
+      align-items: center;
     }
     .ai-nav-link {
       color: #fff;
@@ -50,6 +51,25 @@
       background: #fff;
       color: #1976d2;
     }
+    .ai-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 0.4rem;
+      margin-left: 0.5rem;
+      z-index: 20;
+    }
+    .ai-hamburger span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      margin: 5px 0;
+      background: #fff;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
     @media (max-width: 600px) {
       .ai-header {
         padding: 0.7rem 0.5rem;
@@ -59,10 +79,36 @@
       .ai-header-left {
         gap: 0.5rem;
       }
-      .ai-nav-link {
-        font-size: 0.95rem;
-        padding: 0.3rem 0.7rem;
+      .ai-nav {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        flex-direction: column;
+        gap: 0;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        display: none;
+        animation: fadeInNav 0.25s;
       }
+      .ai-nav.open {
+        display: flex;
+      }
+      .ai-nav-link {
+        width: 100%;
+        text-align: left;
+        padding: 1rem 1.5rem;
+        font-size: 1.08rem;
+        border-radius: 0;
+        border-bottom: 1px solid #29292933;
+      }
+      .ai-hamburger {
+        display: block;
+      }
+    }
+    @keyframes fadeInNav {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -75,7 +121,10 @@
       <img src="logo.png" alt="Logo" class="ai-logo">
       <span class="ai-title"> ME-banten <span class="ai-badge">AI Scan</span></span>
     </div>
-    <nav class="ai-nav">
+    <button class="ai-hamburger" id="aiHamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="ai-nav" id="aiNav">
       <a href="index.html" class="ai-nav-link active">AI Scan</a>
       <a href="image-model.html" class="ai-nav-link">Banten Classifier</a>
     </nav>
@@ -255,6 +304,19 @@
         document.getElementById('preloader').style.display = 'none';
         document.body.classList.remove('preloading');
       }, 3000);
+    });
+
+    // Hamburger menu logic
+    const hamburger = document.getElementById('aiHamburger');
+    const nav = document.getElementById('aiNav');
+    hamburger.addEventListener('click', function() {
+      nav.classList.toggle('open');
+    });
+    // Close nav on link click (mobile)
+    document.querySelectorAll('.ai-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if(window.innerWidth <= 600) nav.classList.remove('open');
+      });
     });
   </script>
 </body>
