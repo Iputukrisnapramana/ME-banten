@@ -9,13 +9,76 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .ai-header {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
+      justify-content: space-between;
+    }
+    .ai-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .ai-nav {
+      display: flex;
+      gap: 0.7rem;
+    }
+    .ai-nav-link {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.4rem 1.1rem;
+      border-radius: 100px;
+      transition: background 0.18s, color 0.18s;
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+    }
+    .ai-nav-link.active, .ai-nav-link:hover {
+      background: #fff;
+      color: #1976d2;
+    }
+    @media (max-width: 600px) {
+      .ai-header {
+        padding: 0.7rem 0.5rem;
+        font-size: 0.98rem;
+        gap: 0.5rem;
+      }
+      .ai-header-left {
+        gap: 0.5rem;
+      }
+      .ai-nav-link {
+        font-size: 0.95rem;
+        padding: 0.3rem 0.7rem;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="preloading">
+  <div id="preloader"><img src="logo.png" alt="Logo" id="preloader-logo"></div>
   <img class="hiasan hiasan-kiri" src="hiasan.png" alt="hiasan kiri" style="position:fixed;top:-10%;left:-180px;transform:translateY(0);width:400px;max-width:32vw;opacity:1;z-index:1;pointer-events:none;">
   <img class="hiasan hiasan-kanan" src="hiasan.png" alt="hiasan kanan" style="position:fixed;top:70%;right: -180px;transform:translateY(0);width:400px;max-width:32vw;opacity:1;z-index:1;pointer-events:none;">
   <header class="ai-header">
-    <img src="logo.png" alt="Logo" class="ai-logo">
-    <span class="ai-title"> ME-banten <span class="ai-badge">AI Scan</span></span>
+    <div class="ai-header-left">
+      <img src="logo.png" alt="Logo" class="ai-logo">
+      <span class="ai-title"> ME-banten <span class="ai-badge">AI Scan</span></span>
+    </div>
+    <nav class="ai-nav">
+      <a href="index.html" class="ai-nav-link active">AI Scan</a>
+      <a href="image-model.html" class="ai-nav-link">Banten Classifier</a>
+    </nav>
   </header>
   <main class="ai-main">
     <div class="ai-scan-container">
@@ -130,7 +193,7 @@
         if (prediction[i].probability > best.probability) best = prediction[i];
       }
       // Tampilkan hasil
-      if (best.probability > 0.7) {
+      if (best.probability > 0.9) {
         const key = normalizeLabel(best.className);
         const data = bantenData[key];
         if (data) {
@@ -142,7 +205,7 @@
             `<div class=\"banten-kategori\">${data.kategori}</div>`,
             `<div class=\"banten-section\"><b>Makna & Fungsi</b><br>${data.makna}</div>`,
             `<div class=\"banten-section\"><b>Cara Membuat</b><br>${data.cara}</div>`,
-            `<div class=\"banten-section\"><b>Tonton Cara Buat:</b><br><a class=\"youtube-link\" href=\"${data.youtube}\" target=\"_blank\">Tonton di YouTube</a></div>`
+            `<div class=\"banten-section\"><b>Link YouTube:</b><br><a class=\"youtube-link\" href=\"${data.youtube}\" target=\"_blank\">Tonton di YouTube</a></div>`
           ];
           // Typewriter effect untuk setiap bagian
           function typeWriter(target, html, cb) {
@@ -186,6 +249,13 @@
       detectBtn.disabled = false;
     });
     detectBtn.onclick = predict;
+
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.getElementById('preloader').style.display = 'none';
+        document.body.classList.remove('preloading');
+      }, 3000);
+    });
   </script>
 </body>
 </html> 
