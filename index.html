@@ -130,7 +130,7 @@
         if (prediction[i].probability > best.probability) best = prediction[i];
       }
       // Tampilkan hasil
-      if (best.probability > 0.7) {
+      if (best.probability > 0.9) {
         const key = normalizeLabel(best.className);
         const data = bantenData[key];
         if (data) {
